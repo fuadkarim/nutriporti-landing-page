@@ -48,8 +48,8 @@ export function Footer() {
               <Image
                 src="/images/nutriporti-logo.png"
                 alt="Nutriporti"
-                width={140}
-                height={48}
+                width={200}
+                height={55}
                 className="h-12 w-auto object-contain brightness-0 invert"
               />
             </div>
