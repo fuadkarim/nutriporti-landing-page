@@ -72,8 +72,8 @@ export function Header() {
                 <Image
                   src="/images/nutriporti-logo.png"
                   alt="Nutriporti"
-                  width={120}
-                  height={40}
+                  width={200}
+                  height={55}
                   className="h-10 w-auto object-contain"
                 />
               </Link>
