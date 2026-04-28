@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <g>
+    <path d="M100,10 L140,70 L100,130 L60,70 Z" fill="navy" />
+    <path d="M100,50 Q85,35 70,50 Q85,65 100,50 Z" fill="green" />
+    <path d="M100,130 Q95,140 100,150 Q105,140 100,130 Z" fill="gold" />
+    <text x="50%" y="170" font-family="Arial" font-size="20" text-anchor="middle" fill="black">Nutriporti</text>
+  </g>
+</svg>
