@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { MapPin, Mail, Phone, Send, CheckCircle } from "lucide-react"
+import { MapPin, Mail, Phone, Send, CheckCircle, Loader2 } from "lucide-react"
 
 const productTypes = [
   "Cocoa Beans",
@@ -35,11 +35,36 @@ const volumeRanges = [
 
 export function ContactSection() {
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [formData, setFormData] = useState({
+    name: "", company: "", email: "", phone: "",
+    product: "", volume: "", port: "", message: ""
+  })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Simulate form submission
-    setSubmitted(true)
+    setLoading(true)
+    setError("")
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+
+      if (!res.ok) throw new Error("Failed to send")
+      setSubmitted(true)
+    } catch {
+      setError("Something went wrong. Please try again or email us directly at info@nutriporti.com")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -58,7 +83,6 @@ export function ContactSection() {
               Fill out the form with your requirements and our trade team will provide a detailed quotation within 24 business hours.
             </p>
 
-            {/* Contact Info */}
             <div className="mt-10 space-y-6">
               <div className="flex items-start gap-4">
                 <div className="w-12 h-12 rounded-full bg-primary-foreground/10 flex items-center justify-center flex-shrink-0">
@@ -80,8 +104,7 @@ export function ContactSection() {
                 <div>
                   <p className="font-medium text-primary-foreground">Email</p>
                   <p className="text-primary-foreground/70 text-sm">
-                    trade@nutriporti.com<br />
-                    support@nutriporti.com
+                    info@nutriporti.com
                   </p>
                 </div>
               </div>
@@ -114,10 +137,10 @@ export function ContactSection() {
                 <p className="text-muted-foreground">
                   Thank you for your inquiry. Our trade team will contact you within 24 hours with a detailed quotation.
                 </p>
-                <Button 
+                <Button
                   className="mt-6"
                   variant="outline"
-                  onClick={() => setSubmitted(false)}
+                  onClick={() => { setSubmitted(false); setFormData({ name: "", company: "", email: "", phone: "", product: "", volume: "", port: "", message: "" }) }}
                 >
                   Submit Another Request
                 </Button>
@@ -127,56 +150,35 @@ export function ContactSection() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name" className="text-foreground">Full Name *</Label>
-                    <Input
-                      id="name"
-                      placeholder="John Smith"
-                      required
-                      className="bg-background border-border"
-                    />
+                    <Input id="name" placeholder="John Smith" required value={formData.name} onChange={handleChange} className="bg-background border-border" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="company" className="text-foreground">Company Name *</Label>
-                    <Input
-                      id="company"
-                      placeholder="ABC Foods Inc."
-                      required
-                      className="bg-background border-border"
-                    />
+                    <Input id="company" placeholder="ABC Foods Inc." required value={formData.company} onChange={handleChange} className="bg-background border-border" />
                   </div>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-foreground">Business Email *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="john@abcfoods.com"
-                      required
-                      className="bg-background border-border"
-                    />
+                    <Input id="email" type="email" placeholder="john@abcfoods.com" required value={formData.email} onChange={handleChange} className="bg-background border-border" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone" className="text-foreground">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      placeholder="+1 234 567 8900"
-                      className="bg-background border-border"
-                    />
+                    <Input id="phone" type="tel" placeholder="+1 234 567 8900" value={formData.phone} onChange={handleChange} className="bg-background border-border" />
                   </div>
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="product" className="text-foreground">Product Type *</Label>
-                    <Select required>
+                    <Label className="text-foreground">Product Type *</Label>
+                    <Select required onValueChange={(val) => setFormData({ ...formData, product: val })}>
                       <SelectTrigger className="bg-background border-border">
                         <SelectValue placeholder="Select product" />
                       </SelectTrigger>
                       <SelectContent>
                         {productTypes.map((product) => (
-                          <SelectItem key={product} value={product.toLowerCase().replace(/\s+/g, "-")}>
+                          <SelectItem key={product} value={product}>
                             {product}
                           </SelectItem>
                         ))}
@@ -184,14 +186,14 @@ export function ContactSection() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="volume" className="text-foreground">Estimated Volume (MT) *</Label>
-                    <Select required>
+                    <Label className="text-foreground">Estimated Volume (MT) *</Label>
+                    <Select required onValueChange={(val) => setFormData({ ...formData, volume: val })}>
                       <SelectTrigger className="bg-background border-border">
                         <SelectValue placeholder="Select volume" />
                       </SelectTrigger>
                       <SelectContent>
                         {volumeRanges.map((volume) => (
-                          <SelectItem key={volume} value={volume.toLowerCase().replace(/\s+/g, "-")}>
+                          <SelectItem key={volume} value={volume}>
                             {volume}
                           </SelectItem>
                         ))}
@@ -202,31 +204,29 @@ export function ContactSection() {
 
                 <div className="space-y-2">
                   <Label htmlFor="port" className="text-foreground">Destination Port *</Label>
-                  <Input
-                    id="port"
-                    placeholder="e.g., Port of Los Angeles, USA"
-                    required
-                    className="bg-background border-border"
-                  />
+                  <Input id="port" placeholder="e.g., Port of Los Angeles, USA" required value={formData.port} onChange={handleChange} className="bg-background border-border" />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="message" className="text-foreground">Additional Requirements</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="Tell us about specific certifications needed, packaging preferences, delivery timeline, etc."
-                    rows={4}
-                    className="bg-background border-border resize-none"
-                  />
+                  <Textarea id="message" placeholder="Tell us about specific certifications needed, packaging preferences, delivery timeline, etc." rows={4} value={formData.message} onChange={handleChange} className="bg-background border-border resize-none" />
                 </div>
 
-                <Button 
-                  type="submit" 
+                {error && (
+                  <p className="text-sm text-red-500 text-center">{error}</p>
+                )}
+
+                <Button
+                  type="submit"
                   size="lg"
+                  disabled={loading}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
                 >
-                  Submit Quote Request
-                  <Send className="ml-2 h-4 w-4" />
+                  {loading ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</>
+                  ) : (
+                    <>Submit Quote Request <Send className="ml-2 h-4 w-4" /></>
+                  )}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
