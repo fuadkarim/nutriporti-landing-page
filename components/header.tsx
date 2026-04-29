@@ -62,51 +62,28 @@ export function Header() {
         </div>
       </nav>
       
-      {/* Mobile menu */}
+     {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50">
-          <div className="fixed inset-0 bg-foreground/20" onClick={() => setMobileMenuOpen(false)} />
-          <div className="fixed inset-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-border">
-            <div className="flex items-center justify-between">
-              <Link href="/" className="-m-1.5 p-1.5 flex items-center gap-2">
-                <Image
-                  src="/images/nutriporti-logo.png"
-                  alt="Nutriporti"
-                  width={200}
-                  height={55}
-                  className="h-10 w-auto object-contain"
-                />
-              </Link>
-              <button
-                type="button"
-                className="-m-2.5 rounded-md p-2.5 text-foreground"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span className="sr-only">Close menu</span>
-                <X className="h-6 w-6" aria-hidden="true" />
-              </button>
-            </div>
-            <div className="mt-6 flow-root">
-              <div className="-my-6 divide-y divide-border">
-                <div className="space-y-4 py-6">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="-mx-3 block rounded-lg px-3 py-4 text-lg font-medium text-foreground hover:bg-muted border-b border-border"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-                <div className="py-6">
-                  <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-                    <Link href="#contact" onClick={() => setMobileMenuOpen(false)}>
-                      Request Quote
-                    </Link>
-                  </Button>
-                </div>
+        <div className="lg:hidden">
+          <div className="fixed inset-0 z-40" onClick={() => setMobileMenuOpen(false)} />
+          <div className="absolute top-full left-0 right-0 z-50 bg-background border-b border-border shadow-lg">
+            <div className="px-6 py-4 space-y-1">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="block px-4 py-3 text-base font-medium text-foreground hover:bg-muted rounded-lg"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              ))}
+              <div className="pt-3 pb-2">
+                <Button asChild className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+                  <Link href="#contact" onClick={() => setMobileMenuOpen(false)}>
+                    Request Quote
+                  </Link>
+                </Button>
               </div>
             </div>
           </div>
