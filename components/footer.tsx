@@ -130,7 +130,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-background/10">
           <p className="text-xs text-background/50 text-center">
-            &copy; {new Date().getFullYear()} Nutriporti Trading B.V. All rights reserved. Registered in the Netherlands.
+            &copy; {new Date().getFullYear()} Nutriporti LLC. All rights reserved. Registered in Ukraine.
           </p>
         </div>
       </div>
