@@ -18,11 +18,11 @@ Destination Port: ${port}
 Additional Requirements: ${message || "None"}
     `.trim()
 
-    const response = await fetch("https://api.zeptomail.com/v1.1/email", {
+    const response = await fetch("https://api.zeptomail.eu/v1.1/email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: process.env.ZEPTOMAIL_API_KEY!,
+        Authorization: `${process.env.ZEPTOMAIL_API_KEY}`,
       },
       body: JSON.stringify({
         from: { address: "info@nutriporti.com", name: "Nutriporti Website" },
